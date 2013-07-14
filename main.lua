@@ -1,6 +1,6 @@
 local Game = require 'game'
+local game = Game.new(display.newGroup())
 local fps = display.newText('FPS: 00', 10, 10, native.systemFont, 20)
-local game = nil
 
 local timer = {
 	lastUpdate = -1,
@@ -31,7 +31,6 @@ end
 
 display.setStatusBar(display.HiddenStatusBar)
 
-game = Game.new(display.newGroup())
 
 display.currentStage:addEventListener('touch', function (evt)
 	print(evt.name, evt.phase, evt.x, evt.y)
