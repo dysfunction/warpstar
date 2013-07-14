@@ -5,6 +5,7 @@ application = {
 		width = 320,
 		height = 480,
 		scale = 'letterbox',
-		yAlign = 'bottom'
+		xAlign = 'right',
+		yAlign = 'top'
 	}
 }
