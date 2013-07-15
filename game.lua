@@ -1,3 +1,4 @@
+local Background = require 'background'
 local Kirby = require 'kirby'
 local Game = {}
 Game.__index = Game
@@ -10,7 +11,6 @@ function Game.new(group)
 	local self = setmetatable({}, Game)
 	display.setDefault('magTextureFilter', 'nearest')
 	self.group = group
-	self:initBackground()
 	self.speed = 2
 	self.input = {
 		touches = {},
@@ -18,41 +18,11 @@ function Game.new(group)
 		right = false
 	}
 
+	self.background = Background.new(self)
 	self:initGround()
 	self.kirby = Kirby.new(self)
 
 	return self
-end
-
-function Game:initBackground()
-	self.background = {
-		x = 0,
-		y = 125,
-		offsetX = 0,
-		scale = 2.2,
-		imageLeft = display.newImage(self.group, 'background.png'),
-		imageRight = display.newImage(self.group, 'background.png')
-	}
-
-	self.background.width = self.background.imageLeft.width
-	self.background.imageLeft.xScale = self.background.scale
-	self.background.imageLeft.yScale = self.background.scale
-	self.background.imageRight.xScale = self.background.scale
-	self.background.imageRight.yScale = self.background.scale
-
-end
-
-function Game:updateBackground(delta)
-	self.background.offsetX = self.background.offsetX + delta * -0.02 * self.speed
-
-	while (self.background.offsetX <= -self.background.width) do
-		self.background.offsetX = self.background.offsetX + self.background.width
-	end
-
-	self.background.imageLeft.x = (self.background.x + self.background.offsetX) * self.background.scale
-	self.background.imageLeft.y = self.background.y
-	self.background.imageRight.x = self.background.imageLeft.x + self.background.imageLeft.width * self.background.scale
-	self.background.imageRight.y = self.background.y
 end
 
 function Game:touchStart(x, y, evt)
@@ -102,7 +72,7 @@ function Game:updateGround(delta)
 end
 
 function Game:update(delta, time)
-	self:updateBackground(delta)
+	self.background:update(delta)
 	self:updateGround(delta)
 	self.kirby:update(delta)
 end
