@@ -22,6 +22,7 @@ function Game.new(group)
 	self.background = Background.new(self)
 	self.ground = Ground.new(self)
 	self.kirby = Kirby.new(self)
+	self.group:toFront()
 
 	return self
 end

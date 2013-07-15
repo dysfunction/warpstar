@@ -6,16 +6,18 @@ function Background.new(game)
 
 	self.game = game
 	self.x = 0
-	self.y = 125
 	self.offsetX = 0
+	self.group = display.newGroup()
+	self.group.y = -65
 	self.scale = 2.2
-	self.imageLeft = display.newImage(game.group, 'images/background.png')
-	self.imageRight = display.newImage(game.group, 'images/background.png')
-	self.width = self.imageLeft.width
-	self.imageLeft.xScale = self.scale
-	self.imageLeft.yScale = self.scale
-	self.imageRight.xScale = self.scale
-	self.imageRight.yScale = self.scale
+	self.group.xScale = self.scale
+	self.group.yScale = self.scale
+
+	for j = 1, 2, 1 do
+		local image = display.newImage(self.group, 'images/background.png')
+		image.x = (j - 1) * image.width
+		self.width = image.width
+	end
 
 	return self
 end
@@ -27,10 +29,8 @@ function Background:update(delta)
 		self.offsetX = self.offsetX + self.width
 	end
 
-	self.imageLeft.x = (self.x + self.offsetX) * self.scale
-	self.imageLeft.y = self.y
-	self.imageRight.x = self.imageLeft.x + self.imageLeft.width * self.scale
-	self.imageRight.y = self.y
+	self.group.x = self.offsetX * self.scale
+
 end
 
 return Background
