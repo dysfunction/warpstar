@@ -3,16 +3,58 @@ Game.__index = Game
 
 Game.WIDTH = 480
 Game.HEIGHT = 320
+Game.CENTERX = math.floor(Game.WIDTH / 2)
 
 function Game.new(group)
 	local self = setmetatable({}, Game)
 	display.setDefault('background', 83, 135, 162)
 	self.group = group
 	self.speed = 2
+	self.input = {
+		touches = {},
+		left = false,
+		right = false
+	}
 
 	self:initGround()
 
 	return self
+end
+
+function Game:updateTouch(id, x, y, active)
+	if (self.input.touches[id] == nil) then
+		self.input.touches[id] = {}
+	end
+
+	self.input.touches[id].x = x
+	self.input.touches[id].y = y
+	self.input.touches[id].active = active or false and active
+end
+
+function Game:touchStart(x, y, evt)
+	self:updateTouch(evt.id, x, y, true)
+
+	if (x < Game.CENTERX) then
+		self.input.left = true
+	else
+		self.input.right = true
+	end
+end
+
+function Game:touchEnd(x, y, evt)
+	self:updateTouch(evt.id, x, y, false)
+	self.input.left = false
+	self.input.right = false
+
+	for k, touch in pairs(self.input.touches) do
+		if (touch.active) then
+			if (touch.x < Game.CENTERX) then
+				self.input.left = true
+			else
+				self.input.right = true
+			end
+		end
+	end
 end
 
 function Game:initGround()

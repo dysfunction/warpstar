@@ -31,9 +31,12 @@ end
 
 display.setStatusBar(display.HiddenStatusBar)
 
-
 display.currentStage:addEventListener('touch', function (evt)
-	print(evt.name, evt.phase, evt.x, evt.y)
+	if (evt.phase == 'began') then
+		game:touchStart(evt.x, evt.y, evt)
+	elseif (evt.phase == 'ended') then
+		game:touchEnd(evt.x, evt.y, evt)
+	end
 end)
 
 Runtime:addEventListener('enterFrame', update)
