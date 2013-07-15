@@ -32,7 +32,7 @@ end
 
 function Game:updateGround(delta)
 	self.ground.x = self.ground.x + delta * 0.1 * self.speed
-	self.ground.group.x = -(self.ground.x % self.ground.tileWidth)
+	self.ground.group.x = -(self.ground.x % self.ground.tileWidth) - 90
 end
 
 function Game:update(delta, time)
