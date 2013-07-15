@@ -17,6 +17,7 @@ function Game.new(group)
 	}
 
 	self:initGround()
+	self:initKirby()
 
 	return self
 end
@@ -57,6 +58,19 @@ function Game:touchEnd(x, y, evt)
 	end
 end
 
+function Game:initKirby()
+	self.kirby = {
+		x = 100,
+		y = 180,
+		offsetY = 0,
+		image = display.newImage(self.group, 'kirby.png')
+	}
+	self.kirby.image:translate(self.kirby.x, self.kirby.y)
+end
+
+function Game:updateKirby()
+end
+
 function Game:initGround()
 	self.ground = {}
 	self.ground.group = display.newGroup()
@@ -79,6 +93,7 @@ end
 
 function Game:update(delta, time)
 	self:updateGround(delta)
+	self:updateKirby(delta)
 end
 
 return Game
