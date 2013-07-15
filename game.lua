@@ -25,9 +25,12 @@ end
 function Game:touchStart(x, y, evt)
 	self.input.touches[evt.id] = { x = x, y = y }
 
-	if (x < Game.CENTERX) then
+	if (self.kirby.jumping == false and x < Game.CENTERX) then
+		self.kirby.ducking = true
 		self.input.left = true
-	else
+	elseif (self.kirby.ducking == false and x >= Game.CENTERX) then
+		self.kirby.jumping = true
+		self.kirby.velocityY = -1.15
 		self.input.right = true
 	end
 end
@@ -50,13 +53,37 @@ function Game:initKirby()
 	self.kirby = {
 		x = 100,
 		y = 180,
+		gravity = 0.8,
+		velocityY = 0,
+		ducking = false,
+		jumping = false,
 		offsetY = 0,
 		image = display.newImage(self.group, 'kirby.png')
 	}
-	self.kirby.image:translate(self.kirby.x, self.kirby.y)
+	self.kirby.image.x = self.kirby.x
+	self.kirby.image.y = self.kirby.y
 end
 
-function Game:updateKirby()
+function Game:updateKirby(delta)
+	if (self.kirby.ducking) then
+		local offset = delta * 0.2;
+
+		if (self.input.left) then
+			self.kirby.offsetY = math.min(64, self.kirby.offsetY + offset)
+		else
+			self.kirby.offsetY = math.max(0, self.kirby.offsetY - offset)
+		end
+
+		self.kirby.ducking = self.kirby.offsetY ~= 0
+
+	elseif (self.kirby.jumping) then
+		self.kirby.offsetY = math.min(0, self.kirby.offsetY + self.kirby.velocityY * delta)
+		self.kirby.velocityY = self.kirby.velocityY + self.kirby.gravity * delta * 0.005
+
+		self.kirby.jumping = self.kirby.offsetY ~= 0
+	end
+
+	self.kirby.image.y = self.kirby.y + self.kirby.offsetY
 end
 
 function Game:initGround()
