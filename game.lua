@@ -1,3 +1,4 @@
+local Kirby = require 'kirby'
 local Game = {}
 Game.__index = Game
 
@@ -18,7 +19,7 @@ function Game.new(group)
 	}
 
 	self:initGround()
-	self:initKirby()
+	self.kirby = Kirby.new(self)
 
 	return self
 end
@@ -59,17 +60,10 @@ function Game:touchStart(x, y, evt)
 
 	if (x < Game.CENTERX) then
 		self.input.left = true
-
-		if (self.kirby.jumping == false) then
-			self.kirby.ducking = true
-		end
+		self.kirby:duck()
 	else
 		self.input.right = true
-
-		if (self.kirby.ducking == false and self.kirby.jumping == false) then
-			self.kirby.jumping = true
-			self.kirby.velocityY = -1.15
-		end
+		self.kirby:jump()
 	end
 end
 
@@ -85,52 +79,6 @@ function Game:touchEnd(x, y, evt)
 			self.input.right = true
 		end
 	end
-end
-
-function Game:initKirby()
-	self.kirby = {
-		x = 100,
-		y = 180,
-		gravity = 0.8,
-		velocityY = 0,
-		ducking = false,
-		jumping = false,
-		offsetY = 0,
-		image = display.newImage(self.group, 'kirby.png')
-	}
-	self.kirby.image.x = self.kirby.x
-	self.kirby.image.y = self.kirby.y
-end
-
-function Game:updateKirby(delta)
-	if (self.kirby.ducking) then
-		local offset = delta * 0.2;
-
-		if (self.input.left) then
-			self.kirby.offsetY = math.min(64, self.kirby.offsetY + offset)
-		else
-			self.kirby.offsetY = math.max(0, self.kirby.offsetY - offset)
-		end
-
-		if (self.kirby.offsetY == 0) then
-			self.kirby.ducking = false
-			if (self.input.right) then
-				self.kirby.jumping = true
-				self.kirby.velocityY = -1.15
-			end
-		end
-
-	elseif (self.kirby.jumping) then
-		self.kirby.offsetY = math.min(0, self.kirby.offsetY + self.kirby.velocityY * delta)
-		self.kirby.velocityY = self.kirby.velocityY + self.kirby.gravity * delta * 0.005
-
-		if (self.kirby.offsetY == 0) then
-			self.kirby.jumping = false
-			self.kirby.ducking = self.input.left
-		end
-	end
-
-	self.kirby.image.y = self.kirby.y + self.kirby.offsetY
 end
 
 function Game:initGround()
@@ -156,7 +104,7 @@ end
 function Game:update(delta, time)
 	self:updateBackground(delta)
 	self:updateGround(delta)
-	self:updateKirby(delta)
+	self.kirby:update(delta)
 end
 
 return Game
