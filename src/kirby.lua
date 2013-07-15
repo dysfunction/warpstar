@@ -20,13 +20,13 @@ function Kirby.new(game)
 end
 
 function Kirby:duck()
-	if (self.jumping == false) then
+	if (not self.jumping) then
 		self.ducking = true
 	end
 end
 
 function Kirby:jump()
-	if (self.ducking == false and self.jumping == false) then
+	if (not self.ducking and not self.jumping) then
 		self.jumping = true
 		self.velocityY = -1.15
 	end
