@@ -1,4 +1,5 @@
 local Background = require 'background'
+local Ground = require 'ground'
 local Kirby = require 'kirby'
 local Game = {}
 Game.__index = Game
@@ -19,7 +20,7 @@ function Game.new(group)
 	}
 
 	self.background = Background.new(self)
-	self:initGround()
+	self.ground = Ground.new(self)
 	self.kirby = Kirby.new(self)
 
 	return self
@@ -51,29 +52,9 @@ function Game:touchEnd(x, y, evt)
 	end
 end
 
-function Game:initGround()
-	self.ground = {}
-	self.ground.group = display.newGroup()
-	self.ground.x = 0
-	local width = 0
-	local j = 0
-	while (j * width < Game.WIDTH + width * 2) do
-		self.ground[j + 1] = display.newImage(self.ground.group, 'ground.png')
-		width = self.ground[j + 1].width
-		self.ground[j + 1]:translate(j * width, Game.HEIGHT - self.ground[j + 1].height)
-		j = j + 1
-	end
-	self.ground.tileWidth = width
-end
-
-function Game:updateGround(delta)
-	self.ground.x = self.ground.x + delta * 0.1 * self.speed
-	self.ground.group.x = -(self.ground.x % self.ground.tileWidth) - 90
-end
-
 function Game:update(delta, time)
 	self.background:update(delta)
-	self:updateGround(delta)
+	self.ground:update(delta)
 	self.kirby:update(delta)
 end
 
