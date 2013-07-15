@@ -11,7 +11,7 @@ function Ground.new(game)
 	local width = 0
 	local j = 0
 	while (j * width < game.WIDTH + width * 2) do
-		self.images[j + 1] = display.newImage(self.group, 'ground.png')
+		self.images[j + 1] = display.newImage(self.group, 'images/ground.png')
 		width = self.images[j + 1].width
 		self.images[j + 1]:translate(j * width, game.HEIGHT - self.images[j + 1].height)
 		j = j + 1

@@ -12,7 +12,7 @@ function Kirby.new(game)
 	self.ducking = false
 	self.jumping = false
 	self.offsetY = 0
-	self.image = display.newImage(self.game.group, 'kirby.png')
+	self.image = display.newImage(self.game.group, 'images/kirby.png')
 	self.image.x = self.x
 	self.image.y = self.y
 

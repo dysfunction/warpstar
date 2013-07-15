@@ -9,8 +9,8 @@ function Background.new(game)
 	self.y = 125
 	self.offsetX = 0
 	self.scale = 2.2
-	self.imageLeft = display.newImage(game.group, 'background.png')
-	self.imageRight = display.newImage(game.group, 'background.png')
+	self.imageLeft = display.newImage(game.group, 'images/background.png')
+	self.imageRight = display.newImage(game.group, 'images/background.png')
 	self.width = self.imageLeft.width
 	self.imageLeft.xScale = self.scale
 	self.imageLeft.yScale = self.scale

@@ -1,6 +1,6 @@
-local Background = require 'background'
-local Ground = require 'ground'
-local Kirby = require 'kirby'
+local Background = require 'src.background'
+local Ground = require 'src.ground'
+local Kirby = require 'src.kirby'
 local Game = {}
 Game.__index = Game
 

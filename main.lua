@@ -1,4 +1,4 @@
-local Game = require 'game'
+local Game = require 'src.game'
 local game = Game.new(display.newGroup())
 local fps = display.newText('FPS: 00', 10, 10, native.systemFont, 20)
 
