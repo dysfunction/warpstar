@@ -22,18 +22,8 @@ function Game.new(group)
 	return self
 end
 
-function Game:updateTouch(id, x, y, active)
-	if (self.input.touches[id] == nil) then
-		self.input.touches[id] = {}
-	end
-
-	self.input.touches[id].x = x
-	self.input.touches[id].y = y
-	self.input.touches[id].active = active or false and active
-end
-
 function Game:touchStart(x, y, evt)
-	self:updateTouch(evt.id, x, y, true)
+	self.input.touches[evt.id] = { x = x, y = y }
 
 	if (x < Game.CENTERX) then
 		self.input.left = true
@@ -43,17 +33,15 @@ function Game:touchStart(x, y, evt)
 end
 
 function Game:touchEnd(x, y, evt)
-	self:updateTouch(evt.id, x, y, false)
+	self.input.touches[evt.id] = nil
 	self.input.left = false
 	self.input.right = false
 
 	for k, touch in pairs(self.input.touches) do
-		if (touch.active) then
-			if (touch.x < Game.CENTERX) then
-				self.input.left = true
-			else
-				self.input.right = true
-			end
+		if (touch.x < Game.CENTERX) then
+			self.input.left = true
+		else
+			self.input.right = true
 		end
 	end
 end
