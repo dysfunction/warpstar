@@ -15,7 +15,7 @@ function Background.new(game)
 
 	for j = 1, 2, 1 do
 		local image = display.newImage(self.group, 'images/background.png')
-		image.x = (j - 1) * image.width
+		image.x = math.floor((j - 1) * image.width)
 		self.width = image.width
 	end
 
@@ -29,7 +29,7 @@ function Background:update(delta)
 		self.offsetX = self.offsetX + self.width
 	end
 
-	self.group.x = self.offsetX * self.scale
+	self.group.x = math.floor(self.offsetX * self.scale)
 
 end
 

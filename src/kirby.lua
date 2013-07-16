@@ -59,7 +59,7 @@ function Kirby:update(delta)
 		end
 	end
 
-	self.image.y = self.y + self.offsetY
+	self.image.y = math.floor(self.y + self.offsetY)
 end
 
 return Kirby
