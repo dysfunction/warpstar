@@ -1,6 +1,7 @@
 local Background = require 'src.background'
 local Ground = require 'src.ground'
 local Kirby = require 'src.kirby'
+local Level = require 'src.level'
 local Game = {}
 Game.__index = Game
 
@@ -12,7 +13,7 @@ function Game.new(group)
 	local self = setmetatable({}, Game)
 	display.setDefault('magTextureFilter', 'nearest')
 	self.group = group
-	self.speed = 2
+	self.speed = 3
 	self.input = {
 		touches = {},
 		left = false,
@@ -21,6 +22,7 @@ function Game.new(group)
 
 	self.background = Background.new(self)
 	self.ground = Ground.new(self)
+	self.level = Level.new(self, self.WIDTH, 0, 20, 4)
 	self.kirby = Kirby.new(self)
 	self.group:toFront()
 
@@ -57,6 +59,7 @@ function Game:update(delta, time)
 	self.background:update(delta)
 	self.ground:update(delta)
 	self.kirby:update(delta)
+	self.level:update(delta)
 end
 
 return Game

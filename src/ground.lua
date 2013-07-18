@@ -13,6 +13,7 @@ function Ground.new(game)
 	while (j * self.tileWidth < game.WIDTH + self.tileWidth * 2) do
 		local image = display.newImage(self.group, 'images/ground.png')
 		self.tileWidth = image.width
+		self.height = image.height
 		image.x = math.floor(j * image.width)
 		image.y = math.floor(game.HEIGHT - image.height * 0.5)
 		j = j + 1
