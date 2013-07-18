@@ -24,7 +24,7 @@ end
 
 function Ground:update(delta)
 	self.x = self.x + delta * 0.1 * self.game.speed
-	self.group.x = -(math.floor(self.x) % self.tileWidth)
+	self.group.x = -(math.floor(self.x) % self.tileWidth) - self.tileWidth
 end
 
 return Ground
