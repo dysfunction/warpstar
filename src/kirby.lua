@@ -1,3 +1,4 @@
+local Rect = require 'src.rect'
 local Kirby = {}
 Kirby.__index = Kirby
 
@@ -15,6 +16,7 @@ function Kirby.new(game)
 	self.image = display.newImage(self.game.group, 'images/kirby.png')
 	self.image.x = self.x
 	self.image.y = self.y
+	self.bounds = Rect.new(self.x, self.y, self.image.width, self.image.height)
 
 	return self
 end
@@ -60,6 +62,7 @@ function Kirby:update(delta)
 	end
 
 	self.image.y = math.floor(self.y + self.offsetY)
+	self.bounds.y = self.image.y
 end
 
 return Kirby
