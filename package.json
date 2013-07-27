@@ -1,11 +1,13 @@
 {
-  "name": "Warpstar",
+  "name": "warpstar",
   "version": "0.0.1",
   "description": "Warpstar",
   "author": "Matt Campbell <matt@mattcampbell.net>",
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-contrib-coffee": "~0.7.0",
-    "grunt-contrib-watch": "~0.4.4"
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-browserify": "~1.2.1",
+    "coffeeify": "~0.5.1",
+    "grunt-contrib-uglify": "~0.2.2"
   }
 }

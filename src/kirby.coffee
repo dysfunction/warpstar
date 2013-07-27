@@ -1,51 +1,53 @@
-define ['assets', 'rect'], (Assets, Rect) ->
-	Kirby = (game) ->
-		PIXI.Sprite.call(this, Assets.kirby)
+Assets = require('./assets.coffee')
+Rect = require('./rect.coffee')
 
-		@game = game
-		@position.x = 100
-		@startY = 148
-		@position.y = @startY
-		@gravity = 0.8
-		@velocityY = 0
-		@ducking = false
-		@jumping = false
-		@offsetY = 0
+Kirby = (game) ->
+	PIXI.Sprite.call(this, Assets.kirby)
 
-	Kirby.prototype = Object.create(PIXI.Sprite.prototype)
-	Kirby.prototype.constructor = Kirby
+	@game = game
+	@position.x = 100
+	@startY = 148
+	@position.y = @startY
+	@gravity = 0.8
+	@velocityY = 0
+	@ducking = false
+	@jumping = false
+	@offsetY = 0
 
-	Kirby.prototype.duck = ->
-		if (!@jumping)
-			@ducking = true
+Kirby.prototype = Object.create(PIXI.Sprite.prototype)
+Kirby.prototype.constructor = Kirby
 
-	Kirby.prototype.jump = ->
-		if (!@ducking && !@jumping)
-			@jumping = true
-			@velocityY = -1.15
+Kirby.prototype.duck = ->
+	if (!@jumping)
+		@ducking = true
 
-	Kirby.prototype.update = (delta) ->
-		offset = delta * 0.2
+Kirby.prototype.jump = ->
+	if (!@ducking && !@jumping)
+		@jumping = true
+		@velocityY = -1.15
 
-		if (@ducking)
-			if (@game.input.left)
-				@offsetY = Math.min(64, @offsetY + offset)
-			else
-				@offsetY = Math.max(0, @offsetY - offset)
+Kirby.prototype.update = (delta) ->
+	offset = delta * 0.2
 
-			if (@offsetY == 0)
-				@ducking = false
-				if (@game.input.right)
-					@jump()
+	if (@ducking)
+		if (@game.input.left)
+			@offsetY = Math.min(64, @offsetY + offset)
+		else
+			@offsetY = Math.max(0, @offsetY - offset)
 
-		else if (@jumping)
-			@offsetY = Math.min(0, @offsetY + @velocityY * delta)
-			@velocityY = @velocityY + @gravity * delta * 0.005
+		if (@offsetY == 0)
+			@ducking = false
+			if (@game.input.right)
+				@jump()
 
-			if (@offsetY == 0)
-				@jumping = false
-				@ducking = @game.input.left
+	else if (@jumping)
+		@offsetY = Math.min(0, @offsetY + @velocityY * delta)
+		@velocityY = @velocityY + @gravity * delta * 0.005
 
-		@position.y = Math.floor(@startY + @offsetY)
+		if (@offsetY == 0)
+			@jumping = false
+			@ducking = @game.input.left
 
-	return Kirby
+	@position.y = Math.floor(@startY + @offsetY)
+
+module.exports = Kirby

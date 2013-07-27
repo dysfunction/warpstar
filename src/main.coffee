@@ -1,63 +1,66 @@
-require ['game', 'assets', 'util'], (Game, Assets, Util) ->
-	renderer = null
-	container = null
-	stage = null
-	game = null
-	repaint = Util.requestAnimationFrame
-	timer =
-		ticks: 0
-		startTime: -1
-		lastUpdate: 0
+Game = require('./game.coffee')
+Assets = require('./assets.coffee')
+Util = require('./util.coffee')
 
-	resize = (width, height) ->
-		renderer.resize(width, height)
-		scale = width / Game.WIDTH
-		scale = Math.min(scale, height / Game.HEIGHT)
-		container.scale.x = scale
-		container.scale.y = scale
-		container.position.x = Math.floor(width - Game.WIDTH * scale)
-		container.position.y = Math.floor(height - Game.HEIGHT * scale)
+renderer = null
+container = null
+stage = null
+game = null
+repaint = Util.requestAnimationFrame
+timer =
+	ticks: 0
+	startTime: -1
+	lastUpdate: 0
 
-	init = -> 
-		stage = new PIXI.Stage(0x000000, true)
-		renderer = new PIXI.autoDetectRenderer(Game.WIDTH, Game.HEIGHT)
-		console.log(renderer);
+resize = (width, height) ->
+	renderer.resize(width, height)
+	scale = width / Game.WIDTH
+	scale = Math.min(scale, height / Game.HEIGHT)
+	container.scale.x = scale
+	container.scale.y = scale
+	container.position.x = Math.floor(width - Game.WIDTH * scale)
+	container.position.y = Math.floor(height - Game.HEIGHT * scale)
 
-		container = new PIXI.DisplayObjectContainer()
-		container.setInteractive(true)
-		container.touchstart = (event) ->
-			pos = event.getLocalPosition(container)
-			game.touchStart(Math.floor(pos.x), Math.floor(pos.y))
+init = ->
+	stage = new PIXI.Stage(0x000000, true)
+	renderer = new PIXI.autoDetectRenderer(Game.WIDTH, Game.HEIGHT)
+	console.log(renderer);
 
-		container.touchend = (event) ->
-			pos = event.getLocalPosition(container)
-			game.touchEnd(Math.floor(pos.x), Math.floor(pos.y))
+	container = new PIXI.DisplayObjectContainer()
+	container.setInteractive(true)
+	container.touchstart = (event) ->
+		pos = event.getLocalPosition(container)
+		game.touchStart(Math.floor(pos.x), Math.floor(pos.y))
 
-		resize(window.innerWidth, window.innerHeight)
+	container.touchend = (event) ->
+		pos = event.getLocalPosition(container)
+		game.touchEnd(Math.floor(pos.x), Math.floor(pos.y))
 
-		game = new Game(container)
+	resize(window.innerWidth, window.innerHeight)
 
-		stage.addChild(container)
-		document.body.appendChild(renderer.view)
-		repaint(gameLoop)
+	game = new Game(container)
 
-	update = (delta, ticks) ->
-		game.update(delta)
+	stage.addChild(container)
+	document.body.appendChild(renderer.view)
+	repaint(gameLoop)
 
-	gameLoop = (time) ->
-		if (timer.startTime < 0)
-			timer.startTime = time
-			timer.lastUpdate = time
-			return repaint(gameLoop)
+update = (delta, ticks) ->
+	game.update(delta)
 
-		timer.delta = time - timer.lastUpdate
-		timer.ticks = time - timer.startTime
+gameLoop = (time) ->
+	if (timer.startTime < 0)
+		timer.startTime = time
 		timer.lastUpdate = time
-		update(timer.delta, timer.ticks)
+		return repaint(gameLoop)
 
-		renderer.render(stage)
-		repaint(gameLoop)
+	timer.delta = time - timer.lastUpdate
+	timer.ticks = time - timer.startTime
+	timer.lastUpdate = time
+	update(timer.delta, timer.ticks)
 
-	window.onresize = -> resize(window.innerWidth, window.innerHeight)
+	renderer.render(stage)
+	repaint(gameLoop)
 
-	Assets.load(init)
+window.onresize = -> resize(window.innerWidth, window.innerHeight)
+
+Assets.load(init)

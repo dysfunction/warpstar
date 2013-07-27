@@ -1,50 +1,52 @@
-define ['assets', 'util'], (Assets, Util) ->
-	BLOCK_SIZE = 32
+Assets = require('./assets.coffee')
+Util = require('./util.coffee')
 
-	obstacleTypes = [
-		# Ground-level 2x2
-		{ x: 0, y: 0, width: 2, height: 2 }
+BLOCK_SIZE = 32
 
-		# Jumpable 2x4
-		{ x: 0, y: 0, width: 2, height: 4 }
+obstacleTypes = [
+	# Ground-level 2x2
+	{ x: 0, y: 0, width: 2, height: 2 }
 
-		# Duckable 2x4
-		{ x: 0, y: -BLOCK_SIZE * 2, width: 2, height: 4 }
+	# Jumpable 2x4
+	{ x: 0, y: 0, width: 2, height: 4 }
 
-		# Duckable 12x8
-		{ x: 0, y: -BLOCK_SIZE * 2, width: 12, height: 8 }
-	]
+	# Duckable 2x4
+	{ x: 0, y: -BLOCK_SIZE * 2, width: 2, height: 4 }
 
-	Level = (game, startX, startY, obstacleCount, obstacleLevel) ->
-		PIXI.DisplayObjectContainer.call(this)
+	# Duckable 12x8
+	{ x: 0, y: -BLOCK_SIZE * 2, width: 12, height: 8 }
+]
 
-		@game = game
-		@obstacles = []
-		@x = 0
-		x = startX
-		y = startY
-		max = Math.min(Math.max(1, obstacleLevel || 1), obstacleTypes.length)
+Level = (game, startX, startY, obstacleCount, obstacleLevel) ->
+	PIXI.DisplayObjectContainer.call(this)
 
-		for j in [0..obstacleCount - 1] by 1
-			ob = obstacleTypes[Util.randFloor(0, max)]
-			sprite = new PIXI.TilingSprite(
-				Assets.block,
-				ob.width * BLOCK_SIZE,
-				ob.height * BLOCK_SIZE 
-			)
+	@game = game
+	@obstacles = []
+	@x = 0
+	x = startX
+	y = startY
+	max = Math.min(Math.max(1, obstacleLevel || 1), obstacleTypes.length)
 
-			sprite.position.x = x + ob.x
-			sprite.position.y = ob.y + game.HEIGHT - ob.height * BLOCK_SIZE - game.ground.height
-			x += ob.width * BLOCK_SIZE + 250 + game.speed * 10
+	for j in [0..obstacleCount - 1] by 1
+		ob = obstacleTypes[Util.randFloor(0, max)]
+		sprite = new PIXI.TilingSprite(
+			Assets.block,
+			ob.width * BLOCK_SIZE,
+			ob.height * BLOCK_SIZE
+		)
 
-			@addChild(sprite)
+		sprite.position.x = x + ob.x
+		sprite.position.y = ob.y + game.HEIGHT - ob.height * BLOCK_SIZE - game.ground.height
+		x += ob.width * BLOCK_SIZE + 250 + game.speed * 10
 
-		return this
+		@addChild(sprite)
 
-	Level.prototype = new PIXI.DisplayObjectContainer()
+	return this
 
-	Level.prototype.update = (delta) ->
-		@x += delta * -0.1 * @game.speed
-		@position.x = Math.floor(@x)
+Level.prototype = new PIXI.DisplayObjectContainer()
 
-	return Level
+Level.prototype.update = (delta) ->
+	@x += delta * -0.1 * @game.speed
+	@position.x = Math.floor(@x)
+
+module.exports = Level
