@@ -23,7 +23,7 @@ resize = (width, height) ->
 
 init = ->
 	stage = new PIXI.Stage(0x000000, true)
-	renderer = new PIXI.autoDetectRenderer(Game.WIDTH, Game.HEIGHT)
+	renderer = new PIXI.autoDetectRenderer(Game.WIDTH, Game.HEIGHT, null, false, false)
 	console.log(renderer);
 
 	container = new PIXI.DisplayObjectContainer()
